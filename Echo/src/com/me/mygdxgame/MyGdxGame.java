@@ -7,7 +7,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.me.mygdxgame.components.MySprite;
+import com.me.mygdxgame.components.Player;
 import com.me.mygdxgame.components.Position;
+import com.me.mygdxgame.components.Velocity;
+import com.me.mygdxgame.factories.EntityFactory;
+import com.me.mygdxgame.systems.ExpiringSystem;
+import com.me.mygdxgame.systems.MovementSystem;
+import com.me.mygdxgame.systems.PlayerInputSystem;
 import com.me.mygdxgame.systems.SpriteRenderSystem;
 
 public class MyGdxGame implements ApplicationListener {
@@ -25,12 +31,20 @@ public class MyGdxGame implements ApplicationListener {
 		world = new World();
 		spriteRenderSystem = world.setSystem(new SpriteRenderSystem(camera),true);
 		
+		world.setSystem(new PlayerInputSystem(camera));
+		world.setSystem(new MovementSystem());
+		world.setSystem(new ExpiringSystem());
+		
 	    world.initialize();
 	    
-	    Entity e = world.createEntity();
-	    e.addComponent(new Position(150,150));
-	    e.addComponent(new MySprite());
-	    e.addToWorld();
+//	    Entity e = world.createEntity();
+//	    e.addComponent(new Position(150,150));
+//	    e.addComponent(new MySprite());
+//	    e.addComponent(new Player());
+//	    e.addComponent(new Velocity(0, 0));
+//	    e.addToWorld();
+	    
+	    EntityFactory.createPlayer(world, 150, 150).addToWorld();
 		
 		//		batch = new SpriteBatch();
 //		
