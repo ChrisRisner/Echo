@@ -1,42 +1,92 @@
 package com.me.mygdxgame.systems;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
+import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.me.mygdxgame.components.MySprite;
 import com.me.mygdxgame.components.Position;
+import com.sun.tools.hat.internal.util.Comparer;
 
 public class SpriteRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
 	@Mapper ComponentMapper<MySprite> sm;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private TextureAtlas atlas;
+	private HashMap<String, AtlasRegion> regions;
+	private Bag<AtlasRegion> regionsByEntity;
+	
+	private List<Entity> sortedEntities;
 	
 	public SpriteRenderSystem(Aspect aspect) {
-		super(aspect);
-		// TODO Auto-generated constructor stub		
+		super(aspect);		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public SpriteRenderSystem(OrthographicCamera camera) {
 		super(Aspect.getAspectForAll(Position.class, MySprite.class));
 		this.camera = camera;
 	}
 	
 	@Override
-	protected void initialize() {
-		super.initialize();
+	protected void initialize() {		
 		batch = new SpriteBatch();
+		//sprite = new Texture(Gdx.files.internal(path));		
+		atlas = new TextureAtlas(Gdx.files.internal("spaceshipwarrior.atlas"));//, Gdx.files.internal("assets"));
+		regions = new HashMap<String, AtlasRegion>();
+		for (AtlasRegion r : atlas.getRegions()) {
+			regions.put(r.name, r);
+		}
+		regionsByEntity = new Bag<AtlasRegion>();
+		sortedEntities = new ArrayList<Entity>();
 	}	
+	
+	@Override
+	protected void inserted(Entity e) {
+		System.out.println("Insert");
+		MySprite sprite = sm.get(e);
+		regionsByEntity.set(e.getId(), regions.get(sprite.name));
+		
+		sortedEntities.add(e);
+		
+		Collections.sort(sortedEntities, new Comparator<Entity>() {
+
+			@Override
+			public int compare(Entity e1, Entity e2) {
+				MySprite s1 = sm.get(e1);
+				MySprite s2 = sm.get(e2);
+				return s1.layer.compareTo(s2.layer);
+			}
+			
+		});
+	}
+	
+	@Override
+	protected void removed(Entity e) {
+		System.out.println("remove: " + e.getId());
+		regionsByEntity.set(e.getId(), null);
+		sortedEntities.remove(e);
+	}
 
 	@Override
 	protected void processEntities(ImmutableBag<Entity> entities) {
-		for (int i = 0; i < entities.size(); i++) {
-			process(entities.get(i));
+		for (Entity e : sortedEntities) {
+			process(e);
 		}		
 	}
 	
@@ -62,11 +112,30 @@ public class SpriteRenderSystem extends EntitySystem {
 			Position position = pm.getSafe(e);
 			MySprite sprite = sm.get(e);
 			
-			batch.setColor(sprite.r, sprite.g, sprite.b, sprite.a);
-			float posx = position.x;
-			float posy = position.y;
-			
-			batch.draw(sprite.sprite, posx, posy);						
+			AtlasRegion spriteRegion = regionsByEntity.get(e.getId());
+			if (spriteRegion == null) {
+				
+				if (e.isEnabled())
+					System.out.println("Is enabled");
+				else
+					System.out.println("Is disabled");
+				if (e.isActive())
+					System.out.println("Is active");
+				else
+					System.out.println("Is deactive");
+				System.out.println("Name: " + sprite.name);
+				System.out.println("Sprite region is null");
+				if (e != null)
+					System.out.println("id: " + e.getId());
+				System.out.println("Size: " +  regionsByEntity.size());
+				
+			} else {
+				batch.setColor(sprite.r, sprite.g, sprite.b, sprite.a);
+				float posX = position.x - (spriteRegion.getRegionWidth() / 2 * sprite.scaleX);
+				float posY = position.y - (spriteRegion.getRegionHeight() / 2 * sprite.scaleX);
+				batch.draw(spriteRegion, posX, posY, 0, 0, spriteRegion.getRegionWidth(), spriteRegion.getRegionHeight(), sprite.scaleX, sprite.scaleY, sprite.rotation);
+			}
+			 						
 		}
 	}
 	

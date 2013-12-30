@@ -49,8 +49,8 @@ public class PlayerInputSystem extends EntityProcessingSystem implements InputPr
 		vel.vy += (ay - drag * vel.vy) * world.getDelta();
 		
 		if (shoot) {
-			EntityFactory.createBullet(world, pos.x + 7, pos.y + 40).addToWorld();
-			EntityFactory.createBullet(world, pos.x + 60, pos.y + 40).addToWorld();
+			EntityFactory.createBullet(world, pos.x - 27, pos.y + 7).addToWorld();
+			EntityFactory.createBullet(world, pos.x + 27, pos.y + 7).addToWorld();
 		}
 	}
 

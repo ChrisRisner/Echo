@@ -11,6 +11,7 @@ import com.me.mygdxgame.components.Player;
 import com.me.mygdxgame.components.Position;
 import com.me.mygdxgame.components.Velocity;
 import com.me.mygdxgame.factories.EntityFactory;
+import com.me.mygdxgame.systems.EntitySpawningTimerSystem;
 import com.me.mygdxgame.systems.ExpiringSystem;
 import com.me.mygdxgame.systems.MovementSystem;
 import com.me.mygdxgame.systems.PlayerInputSystem;
@@ -34,6 +35,7 @@ public class MyGdxGame implements ApplicationListener {
 		world.setSystem(new PlayerInputSystem(camera));
 		world.setSystem(new MovementSystem());
 		world.setSystem(new ExpiringSystem());
+		world.setSystem(new EntitySpawningTimerSystem());
 		
 	    world.initialize();
 	    
