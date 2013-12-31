@@ -13,6 +13,7 @@ import com.me.mygdxgame.Constants;
 import com.me.mygdxgame.components.Bounds;
 import com.me.mygdxgame.components.Health;
 import com.me.mygdxgame.components.Position;
+import com.me.mygdxgame.factories.EntityFactory;
 
 public class CollisionSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
@@ -34,11 +35,23 @@ public class CollisionSystem extends EntitySystem {
 			public void handleCollision(Entity bullet, Entity ship) {
 				Health health = hm.get(ship);
 				health.health -= 10;
+				Position bp = pm.get(bullet);
 				
-				bullet.deleteFromWorld();
+				EntityFactory.createExplosion(world, bp.x, bp.y, 0.1f).addToWorld();
+				
+				/*bullet.deleteFromWorld();
 				if (health.health <= 0) {
 					ship.deleteFromWorld();
+				}*/
+				
+				for (int i = 0; i < 50; i++) 
+					EntityFactory.createParticle(world, bp.x, bp.y).addToWorld();   
+				if (health.health <= 0) {
+					ship.deleteFromWorld();
+					EntityFactory.createExplosion(world, bp.x, bp.y, 0.5f).addToWorld();
 				}
+				  
+				 bullet.deleteFromWorld();
 			}
 		}));
 	}

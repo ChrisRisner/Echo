@@ -8,57 +8,61 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.me.mygdxgame.factories.EntityFactory;
 import com.me.mygdxgame.systems.CollisionSystem;
+import com.me.mygdxgame.systems.ColorAnimationSystem;
 import com.me.mygdxgame.systems.EntitySpawningTimerSystem;
 import com.me.mygdxgame.systems.ExpiringSystem;
+import com.me.mygdxgame.systems.HealthRenderSystem;
+import com.me.mygdxgame.systems.HudRenderSystem;
 import com.me.mygdxgame.systems.MovementSystem;
+import com.me.mygdxgame.systems.ParallaxStarRepeatingSystem;
 import com.me.mygdxgame.systems.PlayerInputSystem;
+import com.me.mygdxgame.systems.RemoveOffscreenShipsSystem;
+import com.me.mygdxgame.systems.ScaleAnimationSystem;
 import com.me.mygdxgame.systems.SpriteRenderSystem;
 
 public class MyGdxGame implements ApplicationListener {
 	private OrthographicCamera camera;
 	private SpriteRenderSystem spriteRenderSystem;
 	private World world;
+	private HealthRenderSystem healthRenderSystem;
+	private HudRenderSystem hudRenderSystem;
+	
+	public static int FRAME_WIDTH = 0;//Gdx.graphics.getWidth();
+	public static int FRAME_HEIGHT = 0;//Gdx.graphics.getHeight();
 	
 	@Override
 	public void create() {		
 		float w = Gdx.graphics.getWidth();
+		FRAME_WIDTH = Gdx.graphics.getWidth();
+		FRAME_HEIGHT = Gdx.graphics.getHeight();
 		float h = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
 		//camera = new OrthographicCamera(1, h/w);
 		camera.setToOrtho(false, w, h);
 		world = new World();
 		spriteRenderSystem = world.setSystem(new SpriteRenderSystem(camera),true);
+		healthRenderSystem = world.setSystem(new HealthRenderSystem(camera), true);
+		hudRenderSystem = world.setSystem(new HudRenderSystem(camera), true);
 		
 		world.setSystem(new PlayerInputSystem(camera));
 		world.setSystem(new MovementSystem());
 		world.setSystem(new ExpiringSystem());
 		world.setSystem(new EntitySpawningTimerSystem());
 		world.setSystem(new CollisionSystem());
+		world.setSystem(new ColorAnimationSystem());
+		world.setSystem(new ScaleAnimationSystem());
+		world.setSystem(new ParallaxStarRepeatingSystem());
+		world.setSystem(new RemoveOffscreenShipsSystem());
 		world.setManager(new GroupManager());
 		
 	    world.initialize();
 	    
-//	    Entity e = world.createEntity();
-//	    e.addComponent(new Position(150,150));
-//	    e.addComponent(new MySprite());
-//	    e.addComponent(new Player());
-//	    e.addComponent(new Velocity(0, 0));
-//	    e.addToWorld();
 	    
 	    EntityFactory.createPlayer(world, 150, 150).addToWorld();
 		
-		//		batch = new SpriteBatch();
-//		
-//		texture = new Texture(Gdx.files.internal("fighter.png"));
-//		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		
-//		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-//		
-//		sprite = new Sprite(region);
-//		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-//		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-//		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		
+	    for(int i = 0; 500 > i; i++) {
+			EntityFactory.createStar(world).addToWorld();
+		}
 	}
 
 	@Override
@@ -76,6 +80,8 @@ public class MyGdxGame implements ApplicationListener {
 		world.setDelta(delta);
 	    world.process();
 	    spriteRenderSystem.process();
+	    healthRenderSystem.process();
+	    hudRenderSystem.process();
 		
 //		batch.setProjectionMatrix(camera.combined);
 //		batch.begin();
