@@ -1,16 +1,13 @@
 package com.me.mygdxgame;
 
-import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.me.mygdxgame.components.MySprite;
-import com.me.mygdxgame.components.Player;
-import com.me.mygdxgame.components.Position;
-import com.me.mygdxgame.components.Velocity;
 import com.me.mygdxgame.factories.EntityFactory;
+import com.me.mygdxgame.systems.CollisionSystem;
 import com.me.mygdxgame.systems.EntitySpawningTimerSystem;
 import com.me.mygdxgame.systems.ExpiringSystem;
 import com.me.mygdxgame.systems.MovementSystem;
@@ -36,6 +33,8 @@ public class MyGdxGame implements ApplicationListener {
 		world.setSystem(new MovementSystem());
 		world.setSystem(new ExpiringSystem());
 		world.setSystem(new EntitySpawningTimerSystem());
+		world.setSystem(new CollisionSystem());
+		world.setManager(new GroupManager());
 		
 	    world.initialize();
 	    

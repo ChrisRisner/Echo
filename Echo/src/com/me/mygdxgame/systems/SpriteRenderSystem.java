@@ -58,7 +58,6 @@ public class SpriteRenderSystem extends EntitySystem {
 	
 	@Override
 	protected void inserted(Entity e) {
-		System.out.println("Insert");
 		MySprite sprite = sm.get(e);
 		regionsByEntity.set(e.getId(), regions.get(sprite.name));
 		
@@ -78,7 +77,6 @@ public class SpriteRenderSystem extends EntitySystem {
 	
 	@Override
 	protected void removed(Entity e) {
-		System.out.println("remove: " + e.getId());
 		regionsByEntity.set(e.getId(), null);
 		sortedEntities.remove(e);
 	}

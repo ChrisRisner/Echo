@@ -1,9 +1,13 @@
 package com.me.mygdxgame.systems;
 
+import com.artemis.ComponentMapper;
+import com.artemis.Entity;
+import com.artemis.annotations.Mapper;
 import com.artemis.systems.VoidEntitySystem;
 import com.artemis.utils.Timer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.me.mygdxgame.components.Health;
 import com.me.mygdxgame.components.MySprite;
 import com.me.mygdxgame.factories.EntityFactory;
 
@@ -19,7 +23,8 @@ public class EntitySpawningTimerSystem extends VoidEntitySystem {
 			
 			@Override
 			public void execute() {
-				EntityFactory.createEnemyShip(world, "enemy1", MySprite.Layer.ACTORS_3, MathUtils.random(0, width),  height+50,  0,  -40).addToWorld();
+				EntityFactory.createEnemyShip(world, "enemy1", MySprite.Layer.ACTORS_3, 
+						10, MathUtils.random(0, width),  height+50,  0,  -40, 20).addToWorld();
 			}
 		};
 		
@@ -27,7 +32,8 @@ public class EntitySpawningTimerSystem extends VoidEntitySystem {
 			
 			@Override
 			public void execute() {
-				EntityFactory.createEnemyShip(world, "enemy2", MySprite.Layer.ACTORS_2, MathUtils.random(0, width),  height+100,  0,  -30).addToWorld();
+				EntityFactory.createEnemyShip(world, "enemy2", MySprite.Layer.ACTORS_2, 
+						20, MathUtils.random(0, width),  height+100,  0,  -30, 40).addToWorld();
 			}
 		};
 		
@@ -35,7 +41,8 @@ public class EntitySpawningTimerSystem extends VoidEntitySystem {
 			
 			@Override
 			public void execute() {
-				EntityFactory.createEnemyShip(world, "enemy3", MySprite.Layer.ACTORS_1, MathUtils.random(0, width),  height+200,  0,  -20).addToWorld();
+				EntityFactory.createEnemyShip(world, "enemy3", MySprite.Layer.ACTORS_1, 
+						60, MathUtils.random(0, width),  height+200,  0,  -20, 70).addToWorld();
 			}
 		};
 	}
