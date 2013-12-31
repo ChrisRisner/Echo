@@ -29,7 +29,7 @@ public class RemoveOffscreenShipsSystem extends IntervalEntityProcessingSystem {
 		Bounds bounds = bm.get(e);
 		
 		if(position.y < -MyGdxGame.FRAME_HEIGHT/2-bounds.radius) {
-			System.out.println("Remove offscreen");
+			//System.out.println("Remove offscreen");
 			e.deleteFromWorld();
 		}
 	}
