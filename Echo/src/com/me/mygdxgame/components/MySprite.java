@@ -1,8 +1,8 @@
 package com.me.mygdxgame.components;
 
 import com.artemis.Component;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MySprite extends Component {
 	
@@ -31,6 +31,7 @@ public class MySprite extends Component {
 	 }
 	  
 	 public Texture sprite;
+	 public TextureRegion region;
 	 public float r = 1;
 	 public float g = 1;
 	 public float b = 1;
@@ -38,6 +39,7 @@ public class MySprite extends Component {
 	 public float scaleX = 1;
 	 public float scaleY = 1;
 	 public float rotation;
+	 public int x, y, width, height;
 	 public String name;
 	 public Layer layer = Layer.DEFAULT;
 	 

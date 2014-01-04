@@ -3,6 +3,7 @@ package com.me.mygdxgame.factories;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.managers.GroupManager;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.me.mygdxgame.Constants;
 import com.me.mygdxgame.MyGdxGame;
@@ -17,6 +18,7 @@ import com.me.mygdxgame.components.ParallaxStar;
 import com.me.mygdxgame.components.Player;
 import com.me.mygdxgame.components.Position;
 import com.me.mygdxgame.components.ScaleAnimation;
+import com.me.mygdxgame.components.SpriteAnimation;
 import com.me.mygdxgame.components.Velocity;
 
 public class EntityFactory {
@@ -40,6 +42,28 @@ public class EntityFactory {
 		world.getManager(GroupManager.class).add(e, Constants.Groups.PLAYER_SHIP);
 		
 		return e;
+	}
+	
+	public static Entity createWarrior(World world, float x, float y) {
+		Entity e = world.createEntity();
+		e.addComponent(new Position(x, y));
+		
+		MySprite sprite = new MySprite("anim", MySprite.Layer.ACTORS_1);
+		sprite.r = sprite.g = sprite.b = sprite.a = 1f;
+		sprite.rotation = 0f;
+		sprite.scaleX = 3f;
+		sprite.scaleY = 3f;
+		e.addComponent(sprite);
+		
+		SpriteAnimation anim = new SpriteAnimation();
+		anim.playMode = Animation.LOOP_PINGPONG;
+		anim.frameDuration = 0.3f;
+		anim.stateTime = MathUtils.random();
+		e.addComponent(anim);
+		
+		
+		return e;
+		
 	}
 	
 	public static Entity createBullet(World world, float x, float y) {

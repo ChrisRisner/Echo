@@ -18,6 +18,7 @@ import com.me.mygdxgame.systems.ParallaxStarRepeatingSystem;
 import com.me.mygdxgame.systems.PlayerInputSystem;
 import com.me.mygdxgame.systems.RemoveOffscreenShipsSystem;
 import com.me.mygdxgame.systems.ScaleAnimationSystem;
+import com.me.mygdxgame.systems.SpriteAnimationSystem;
 import com.me.mygdxgame.systems.SpriteRenderSystem;
 
 public class MyGdxGame implements ApplicationListener {
@@ -53,6 +54,7 @@ public class MyGdxGame implements ApplicationListener {
 		world.setSystem(new ScaleAnimationSystem());
 		world.setSystem(new ParallaxStarRepeatingSystem());
 		world.setSystem(new RemoveOffscreenShipsSystem());
+		world.setSystem(new SpriteAnimationSystem());
 		world.setManager(new GroupManager());
 		
 	    world.initialize();
@@ -63,6 +65,8 @@ public class MyGdxGame implements ApplicationListener {
 	    for(int i = 0; 500 > i; i++) {
 			EntityFactory.createStar(world).addToWorld();
 		}
+	    
+	    EntityFactory.createWarrior(world, 100, 100).addToWorld();
 	}
 
 	@Override

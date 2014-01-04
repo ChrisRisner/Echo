@@ -15,19 +15,24 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.components.MySprite;
 import com.me.mygdxgame.components.Position;
-import com.sun.tools.hat.internal.util.Comparer;
+import com.me.mygdxgame.components.SpriteAnimation;
 
 public class SpriteRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
 	@Mapper ComponentMapper<MySprite> sm;
+	@Mapper ComponentMapper<SpriteAnimation> sam;
+	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private TextureAtlas atlas;
+	private TextureAtlas atlasCharacters;
 	private HashMap<String, AtlasRegion> regions;
 	private Bag<AtlasRegion> regionsByEntity;
 	
@@ -48,10 +53,11 @@ public class SpriteRenderSystem extends EntitySystem {
 		batch = new SpriteBatch();
 		//sprite = new Texture(Gdx.files.internal(path));		
 		atlas = new TextureAtlas(Gdx.files.internal("spaceshipwarrior.atlas"));//, Gdx.files.internal("assets"));
-		regions = new HashMap<String, AtlasRegion>();
-		for (AtlasRegion r : atlas.getRegions()) {
-			regions.put(r.name, r);
-		}
+		atlasCharacters = new TextureAtlas(Gdx.files.internal("characters.atlas"));//, Gdx.files.internal("assets"));
+//		regions = new HashMap<String, AtlasRegion>();
+//		for (AtlasRegion r : atlas.getRegions()) {
+//			regions.put(r.name, r);
+//		}
 		regionsByEntity = new Bag<AtlasRegion>();
 		sortedEntities = new ArrayList<Entity>();
 	}	
@@ -59,9 +65,23 @@ public class SpriteRenderSystem extends EntitySystem {
 	@Override
 	protected void inserted(Entity e) {
 		MySprite sprite = sm.get(e);
-		regionsByEntity.set(e.getId(), regions.get(sprite.name));
-		
 		sortedEntities.add(e);
+		TextureRegion reg = atlas.findRegion(sprite.name);
+		if (reg == null)
+			reg = atlasCharacters.findRegion(sprite.name);
+		sprite.region = reg;
+		sprite.x = reg.getRegionX();
+		sprite.y = reg.getRegionY();
+		sprite.width = reg.getRegionWidth();
+		sprite.height = reg.getRegionHeight();
+		if (sam.has(e)) {
+			SpriteAnimation anim = sam.getSafe(e);
+			anim.animation = new Animation(anim.frameDuration, atlasCharacters.findRegions(sprite.name), anim.playMode);
+			//anim.animation = new Animation(anim.frameDuration, atlas.findRegions(sprite.name), anim.playMode);
+		}
+		//regionsByEntity.set(e.getId(), regions.get(sprite.name));
+		
+		
 		
 		Collections.sort(sortedEntities, new Comparator<Entity>() {
 
@@ -110,17 +130,10 @@ public class SpriteRenderSystem extends EntitySystem {
 			Position position = pm.getSafe(e);
 			MySprite sprite = sm.get(e);
 			
-			AtlasRegion spriteRegion = regionsByEntity.get(e.getId());
-			if (spriteRegion == null) {
-				
-				if (e.isEnabled())
-					System.out.println("Is enabled");
-				else
-					System.out.println("Is disabled");
-				if (e.isActive())
-					System.out.println("Is active");
-				else
-					System.out.println("Is deactive");
+			//AtlasRegion spriteRegion = regionsByEntity.get(e.getId());
+			TextureRegion spriteRegion = sprite.region;
+			
+			if (spriteRegion == null) {				
 				System.out.println("Name: " + sprite.name);
 				System.out.println("Sprite region is null");
 				if (e != null)
@@ -128,7 +141,14 @@ public class SpriteRenderSystem extends EntitySystem {
 				System.out.println("Size: " +  regionsByEntity.size());
 				
 			} else {
+				
+				
 				batch.setColor(sprite.r, sprite.g, sprite.b, sprite.a);
+				int width = spriteRegion.getRegionWidth();
+				int height = spriteRegion.getRegionHeight();
+				
+				sprite.region.setRegion(sprite.x, sprite.y, width, height);
+				
 				float posX = position.x - (spriteRegion.getRegionWidth() / 2 * sprite.scaleX);
 				float posY = position.y - (spriteRegion.getRegionHeight() / 2 * sprite.scaleX);
 				batch.draw(spriteRegion, posX, posY, 0, 0, spriteRegion.getRegionWidth(), spriteRegion.getRegionHeight(), sprite.scaleX, sprite.scaleY, sprite.rotation);
