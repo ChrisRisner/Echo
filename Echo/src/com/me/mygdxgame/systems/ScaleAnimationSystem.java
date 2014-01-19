@@ -6,6 +6,7 @@ import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.me.mygdxgame.components.MySprite;
+import com.me.mygdxgame.components.Position;
 import com.me.mygdxgame.components.ScaleAnimation;
 
 public class ScaleAnimationSystem extends EntityProcessingSystem {
@@ -19,6 +20,8 @@ public class ScaleAnimationSystem extends EntityProcessingSystem {
 
 	@Override
 	protected void process(Entity e) {
+		sa = ComponentMapper.getFor(ScaleAnimation.class, world);
+		sm = ComponentMapper.getFor(MySprite.class, world);
 		ScaleAnimation scaleAnimation = sa.get(e);
 		if (scaleAnimation.active) {
 			MySprite sprite = sm.get(e);

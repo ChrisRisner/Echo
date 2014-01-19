@@ -19,6 +19,9 @@ public class MovementSystem extends EntityProcessingSystem {
 	
 	@Override
 	protected void process(Entity e) {
+		pm = ComponentMapper.getFor(Position.class, world);
+		vm = ComponentMapper.getFor(Velocity.class, world);
+		
 		Position position = pm.get(e);
 		Velocity velocity = vm.get(e);
 		

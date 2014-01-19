@@ -20,6 +20,7 @@ public class ParallaxStarRepeatingSystem extends IntervalEntityProcessingSystem 
 
 	@Override
 	protected void process(Entity e) {
+		pm = ComponentMapper.getFor(Position.class, world);
 		Position position = pm.get(e);
 
 		float frame_height = Gdx.graphics.getHeight();

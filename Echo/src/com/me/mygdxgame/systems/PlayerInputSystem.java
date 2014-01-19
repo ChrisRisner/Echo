@@ -43,6 +43,9 @@ public class PlayerInputSystem extends EntityProcessingSystem implements InputPr
 		mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 		camera.unproject(mouseVector);
 		
+		vm = ComponentMapper.getFor(Velocity.class, world);
+		pm = ComponentMapper.getFor(Position.class, world);
+		
 		Velocity vel = vm.get(e);
 		Position pos = pm.get(e);
 		vel.vx += (ax - drag * vel.vx) * world.getDelta();

@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.me.mygdxgame.components.MySprite;
 import com.me.mygdxgame.components.Position;
 import com.me.mygdxgame.components.SpriteAnimation;
+import com.me.mygdxgame.components.Velocity;
 
 public class SpriteRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
@@ -45,7 +46,7 @@ public class SpriteRenderSystem extends EntitySystem {
 	@SuppressWarnings("unchecked")
 	public SpriteRenderSystem(OrthographicCamera camera) {
 		super(Aspect.getAspectForAll(Position.class, MySprite.class));
-		this.camera = camera;
+		this.camera = camera;		
 	}
 	
 	@Override
@@ -64,6 +65,10 @@ public class SpriteRenderSystem extends EntitySystem {
 	
 	@Override
 	protected void inserted(Entity e) {
+		//pm = ComponentMapper.getFor(Position.class, world);
+		sm = ComponentMapper.getFor(MySprite.class, world);
+		sam = ComponentMapper.getFor(SpriteAnimation.class, world);
+		
 		MySprite sprite = sm.get(e);
 		sortedEntities.add(e);
 		TextureRegion reg = atlas.findRegion(sprite.name);
@@ -126,6 +131,9 @@ public class SpriteRenderSystem extends EntitySystem {
 	}
 	
 	protected void process(Entity e) {
+		pm = ComponentMapper.getFor(Position.class, world);
+		sm = ComponentMapper.getFor(MySprite.class, world);
+		sam = ComponentMapper.getFor(SpriteAnimation.class, world);
 		if (pm.has(e)) {
 			Position position = pm.getSafe(e);
 			MySprite sprite = sm.get(e);

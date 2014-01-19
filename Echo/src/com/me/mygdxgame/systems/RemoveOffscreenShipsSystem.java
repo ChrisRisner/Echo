@@ -25,6 +25,9 @@ public class RemoveOffscreenShipsSystem extends IntervalEntityProcessingSystem {
 
 	@Override
 	protected void process(Entity e) {
+		
+		pm = ComponentMapper.getFor(Position.class, world);
+		bm = ComponentMapper.getFor(Bounds.class, world);
 		Position position = pm.get(e);
 		Bounds bounds = bm.get(e);
 		

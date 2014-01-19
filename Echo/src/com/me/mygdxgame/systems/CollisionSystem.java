@@ -33,6 +33,10 @@ public class CollisionSystem extends EntitySystem {
 		collisionPairs.add(new CollisionPair(Constants.Groups.PLAYER_BULLETS, Constants.Groups.ENEMY_SHIPS, new CollisionHandler() {
 			@Override
 			public void handleCollision(Entity bullet, Entity ship) {
+				pm = ComponentMapper.getFor(Position.class, world);
+				hm = ComponentMapper.getFor(Health.class, world);
+				bm = ComponentMapper.getFor(Bounds.class, world);
+				
 				Health health = hm.get(ship);
 				health.health -= 10;
 				Position bp = pm.get(bullet);

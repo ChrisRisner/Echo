@@ -6,6 +6,7 @@ import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.me.mygdxgame.components.Expires;
+import com.me.mygdxgame.components.Position;
 
 
 public class ExpiringSystem extends EntityProcessingSystem {
@@ -23,6 +24,8 @@ public class ExpiringSystem extends EntityProcessingSystem {
 	
 	@Override
 	protected void process(Entity e) {
+		em = ComponentMapper.getFor(Expires.class, world);
+		
 		Expires exp = em.get(e);
 		exp.delay -= world.getDelta();
 		if (exp.delay <= 0) {

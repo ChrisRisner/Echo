@@ -50,6 +50,9 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
 	@Override
 	protected void process(Entity e) {
+		pm = ComponentMapper.getFor(Position.class, world);
+		hm = ComponentMapper.getFor(Health.class, world);
+		
 		Position position = pm.get(e);
 		Health health = hm.get(e);
 		

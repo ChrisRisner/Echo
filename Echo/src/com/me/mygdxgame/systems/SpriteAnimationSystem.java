@@ -20,6 +20,8 @@ public class SpriteAnimationSystem extends EntityProcessingSystem {
 	
 	@Override
 	protected void process(Entity e) {
+		sm = ComponentMapper.getFor(MySprite.class, world);
+		sam = ComponentMapper.getFor(SpriteAnimation.class, world);
 		MySprite sprite = sm.get(e);
 		SpriteAnimation anim = sam.get(e);
 		

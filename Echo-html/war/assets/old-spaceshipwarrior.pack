@@ -1,0 +1,73 @@
+
+spaceshipwarrior.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+explosion
+  rotate: false
+  xy: 1, 318
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+enemy3
+  rotate: false
+  xy: 1, 94
+  size: 278, 222
+  orig: 278, 222
+  offset: 0, 0
+  index: -1
+enemy2
+  rotate: false
+  xy: 515, 700
+  size: 146, 130
+  orig: 146, 130
+  offset: 0, 0
+  index: -1
+fighter
+  rotate: false
+  xy: 1, 6
+  size: 70, 86
+  orig: 70, 86
+  offset: 0, 0
+  index: -1
+enemy1
+  rotate: false
+  xy: 281, 270
+  size: 46, 46
+  orig: 46, 46
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 515, 678
+  size: 18, 20
+  orig: 18, 20
+  offset: 0, 0
+  index: -1
+bullet
+  rotate: false
+  xy: 663, 820
+  size: 3, 10
+  orig: 3, 10
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 1, 1
+  size: 3, 3
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+
+spaceshipwarrior2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+data/libgdx
+  rotate: false
+  xy: 1, 1
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1

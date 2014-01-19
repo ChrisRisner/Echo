@@ -18,6 +18,9 @@ public class ColorAnimationSystem extends EntityProcessingSystem {
 	}
 	
 	protected void process(Entity e) {
+		cam = ComponentMapper.getFor(ColorAnimation.class, world);
+		sm = ComponentMapper.getFor(MySprite.class, world);
+		
 		  ColorAnimation c = cam.get(e);
 		  MySprite sprite = sm.get(e);
 		   
